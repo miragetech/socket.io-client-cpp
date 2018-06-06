@@ -3,18 +3,21 @@
 //
 //  Created by Melo Yao on 3/25/15.
 //
-
 #ifndef __SIO_MESSAGE_H__
 #define __SIO_MESSAGE_H__
+
 #include <string>
 #include <memory>
 #include <vector>
 #include <map>
 #include <cassert>
 #include <type_traits>
+
+#include "export.hpp"
+
 namespace sio
 {
-    class message
+    class SIO_EXPORT message
     {
     public:
         enum flag

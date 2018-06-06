@@ -215,11 +215,15 @@ namespace sio
             } else {
                 ss<<uo.get_host();
             }
-            ss<<":"<<uo.get_port()<<"/socket.io/?EIO=4&transport=websocket";
+            // If a resource path was included in the URI, use that, otherwise
+            // use the default /socket.io/.
+            const std::string path(uo.get_resource() == "/" ? "/socket.io/" : uo.get_resource());
+            ss << ":" << uo.get_port() << path << "?EIO=4&transport=websocket";
+
             if(m_sid.size()>0){
                 ss<<"&sid="<<m_sid;
             }
-            ss<<"&t="<<time(NULL)<<queryString;
+            ss<</*"&t="<<time(NULL)<<*/queryString;
             lib::error_code ec;
             client_type::connection_ptr con = m_client.get_connection(ss.str(), ec);
             if (ec) {
@@ -279,7 +283,7 @@ namespace sio
         if(ec || m_con.expired())
         {
             if (ec != boost::asio::error::operation_aborted)
-                LOG("ping exit,con is expired?"<<m_con.expired()<<",ec:"<<ec.message()<<endl){};
+                LOG("ping exit,con is expired?" << m_con.expired() << ",ec:" << ec.message() << endl); {}
             return;
         }
         packet p(packet::frame_ping);
@@ -493,7 +497,7 @@ namespace sio
             m_ping_timer.reset(new boost::asio::deadline_timer(m_client.get_io_service()));
             boost::system::error_code ec;
             m_ping_timer->expires_from_now(milliseconds(m_ping_interval), ec);
-            if(ec)LOG("ec:"<<ec.message()<<endl){};
+            if (ec)LOG("ec:" << ec.message() << endl); {}
             m_ping_timer->async_wait(lib::bind(&client_impl::ping,this,lib::placeholders::_1));
             LOG("On handshake,sid:"<<m_sid<<",ping interval:"<<m_ping_interval<<",ping timeout"<<m_ping_timeout<<endl);
             return;

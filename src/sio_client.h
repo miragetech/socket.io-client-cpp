@@ -15,7 +15,7 @@ namespace sio
 {
     class client_impl;
     
-    class client {
+    class SIO_EXPORT client {
     public:
         enum close_reason
         {
