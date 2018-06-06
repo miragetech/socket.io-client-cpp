@@ -6,6 +6,14 @@
 
 #ifndef __SIO_MESSAGE_H__
 #define __SIO_MESSAGE_H__
+
+# if defined( DYNAMIC_LIBRARY )
+#  define SIO_EXPORT   __declspec(dllexport)
+#else
+#  define SIO_EXPORT   __declspec(dllimport)
+#endif
+
+
 #include <string>
 #include <memory>
 #include <vector>
@@ -14,7 +22,7 @@
 #include <type_traits>
 namespace sio
 {
-    class message
+    class SIO_EXPORT message
     {
     public:
         enum flag
